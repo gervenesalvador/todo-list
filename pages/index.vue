@@ -31,37 +31,41 @@
                       </v-avatar>
                     </template>
                   </v-chip>
-                  <v-btn variant="flat" prepend-icon="mdi-delete" color="red" rounded="0" class="mr-2">
+                  <v-btn 
+                    v-if="tasksDone > 0"
+                    variant="flat" prepend-icon="mdi-delete" color="red" rounded="0" class="mr-2" @click="clearDoneTasks">
                     Tasks Done
                   </v-btn>
-                  <v-btn variant="flat" prepend-icon="mdi-delete" color="red" rounded="0">
+                  <v-btn variant="flat" prepend-icon="mdi-delete" color="red" rounded="0" @click="deleteAllTasks">
                     Tasks
                   </v-btn>
                 </div>
               </v-card-title>
               <v-card-text>
-
                 <v-list dense class="tasks-lists">
-                  <v-list-item v-for="task in tasks" :key="task.id" class="rounded-lg border-grey py-3">
+                  <v-list-item 
+                    v-for="task in tasks" :key="task.id" 
+                    transition="slide-x-transition"
+                    :class="'rounded-lg border-grey py-3 ' + (task.status.done ? 'task-done' : '')"
+                  >
                     <template v-slot:prepend>
-                      <v-btn icon variant="flat" color="success" density="compact" >
+                      <v-btn icon variant="flat" color="success" density="compact" @click="toggleTaskStatus(task.id)">
                         <v-icon color="white">mdi-check</v-icon>
                       </v-btn>
                     </template>
-
                     <v-list-item-title class="px-3">{{ task.text }}</v-list-item-title>
-
                     <template v-slot:append>
-                      <v-btn icon variant="flat" density="compact" >
+                      <v-btn icon variant="flat" density="compact" @click="deleteTask(task.id)" >
                         <v-icon color="red">mdi-delete</v-icon>
                       </v-btn>
                     </template>
                   </v-list-item>
                 </v-list>
-
+                <div v-if="tasks.length == 0" class="text-center text-grey">
+                  You have no tasks yet. Add one to get started!
+                </div>
               </v-card-text>
               <v-card-actions class="bg-grey-lighten-3 py-3 px-5">
-
                 <v-text-field
                   v-model="newTask"
                   placeholder="New Task"
@@ -79,42 +83,80 @@
                     </v-btn>
                   </template>
                 </v-text-field>
-
               </v-card-actions>
             </v-card>
           </v-col>
         </v-row>
+        <v-snackbar
+          v-model="snackbarDisplay"
+          :timeout="snackbarTimeout"
+        >
+          {{ snackbarMessage }}
+          <template v-slot:actions>
+            <v-btn
+              variant="flat"
+              @click="snackbarDisplay = false"
+              icon="mdi-close"
+            >
+            </v-btn>
+          </template>
+        </v-snackbar>
       </v-container>
     </div>
   </v-app>
 </template>
 
 <script>
+import { store } from '~/stores/';
+// import { VSlideYTransition } from 'vuetify/lib'
+
 export default {
+  // components: {
+  //   VSlideYTransition,
+  // },
   data() {
     return {
-      tasks: [
-        { id: 1, text: 'Task 1', completed: false },
-        { id: 2, text: 'Task 2', completed: true },
-        { id: 3, text: 'Task 3', completed: false },
-      ],
       newTask: '',
+      snackbarDisplay: false,
+      snackbarMessage: 'Please enter a task',
+      snackbarTimeout: 2000,
     };
   },
   computed: {
+    tasks() {
+      return store.state.tasks;
+    },
     totalTasks() {
       return this.tasks.length;
     },
     tasksDone() {
-      return this.tasks.filter((task) => task.completed).length;
+      return this.tasks.filter((task) => task.status.done).length;
     },
   },
   methods: {
     addTask() {
-      if (this.newTask) {
-        this.tasks.push({ id: this.tasks.length + 1, text: this.newTask, completed: false });
-        this.newTask = '';
+      if (!this.newTask) {
+        this.snackbarDisplay = true;
       }
+      if (this.newTask) {
+        store.commit("ADD_TASK", this.newTask);
+        this.newTask = '';
+        setTimeout(() => { // this will wait for the DOM to be updated and will get the actuall height
+          document.querySelector('.tasks-lists').scrollTop = document.querySelector('.tasks-lists').scrollHeight;
+        }, 1);
+      }
+    },
+    toggleTaskStatus(taskId) {
+      store.commit('TOGGLE_TASK_STATUS', taskId);
+    },
+    clearDoneTasks() {
+      store.commit('CLEAR_DONE_TASKS');
+    },
+    deleteTask(taskId) {
+      store.commit('DELETE_TASK', taskId)
+    },
+    deleteAllTasks() {
+      store.commit('DELETE_ALL_TASKS');
     },
   },
 };

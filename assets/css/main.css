@@ -1,5 +1,11 @@
+:root {
+    --grey-color: #BDBDBD;
+}
 .v-application {
     background: linear-gradient(to bottom, #34b184, #324555) !important;
+}
+.v-card-text {
+    padding-top: 1em !important;
 }
 .container-wrapper {
     display: flex;
@@ -7,9 +13,27 @@
     height: 100vh;
 }
 .border-grey { 
-    border-color: #eeeeee !important; 
+    border-color: var(--grey-color) !important; 
     border-width: 3px !important;
 }
+.tasks-lists {
+    height: 200px;
+}
+/* tasks-lists scroll bar */
+.tasks-lists::-webkit-scrollbar {
+    width: 5px;
+}
+.tasks-lists::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+.tasks-lists::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+.tasks-lists::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+/* scroll bar */
+
 .tasks-lists .v-list-item {
     margin-bottom: 6px;
 }
@@ -18,4 +42,17 @@
 }
 .tasks-lists > .v-list-item:last-child {
     margin-bottom: 0;
+}
+.tasks-lists .v-list-item .v-list-item__append {
+    display: none;
+}
+.tasks-lists .v-list-item:hover .v-list-item__append {
+    display: flex;
+}
+.tasks-lists .v-list-item.task-done .v-list-item__content {
+    color: var(--grey-color) !important;
+    text-decoration: line-through;
+}
+.tasks-lists .v-list-item.task-done .v-list-item__prepend .v-btn {
+    background-color: var(--grey-color) !important; 
 }
