@@ -42,27 +42,29 @@
                 </div>
               </v-card-title>
               <v-card-text>
-                <v-list dense class="tasks-lists">
-                  <v-list-item 
-                    v-for="task in tasks" :key="task.id" 
-                    transition="slide-x-transition"
-                    :class="'rounded-lg border-grey py-3 ' + (task.status.done ? 'task-done' : '')"
-                  >
-                    <template v-slot:prepend>
-                      <v-btn icon variant="flat" color="success" density="compact" @click="toggleTaskStatus(task.id)">
-                        <v-icon color="white">mdi-check</v-icon>
-                      </v-btn>
-                    </template>
-                    <v-list-item-title class="px-3">{{ task.text }}</v-list-item-title>
-                    <template v-slot:append>
-                      <v-btn icon variant="flat" density="compact" @click="deleteTask(task.id)" >
-                        <v-icon color="red">mdi-delete</v-icon>
-                      </v-btn>
-                    </template>
-                  </v-list-item>
-                </v-list>
-                <div v-if="tasks.length == 0" class="text-center text-grey">
-                  You have no tasks yet. Add one to get started!
+                <div v-if="tasks.length > 0" class="lists-scroll">
+                  <v-slide-x-transition group dense tag="v-list" class="tasks-lists">
+                    <v-list-item 
+                      v-for="task in tasks" :key="task.id" 
+                      transition="slide-x-transition"
+                      :class="'rounded-lg border-grey py-3 ' + (task.status.done ? 'task-done' : '')"
+                    >
+                      <template v-slot:prepend>
+                        <v-btn icon variant="flat" color="success" density="compact" @click="toggleTaskStatus(task.id)">
+                          <v-icon color="white">mdi-check</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-list-item-title class="px-3">{{ task.text }}</v-list-item-title>
+                      <template v-slot:append>
+                        <v-btn icon variant="flat" density="compact" @click="deleteTask(task.id)" >
+                          <v-icon color="red">mdi-delete</v-icon>
+                        </v-btn>
+                      </template>
+                    </v-list-item>
+                  </v-slide-x-transition>
+                </div>
+                <div v-if="tasks.length == 0" class="align-center d-flex justify-center lists-scroll text-center text-grey">
+                  <div>You have no tasks yet. Add one to get started!</div>
                 </div>
               </v-card-text>
               <v-card-actions class="bg-grey-lighten-3 py-3 px-5">
@@ -108,12 +110,8 @@
 
 <script>
 import { store } from '~/stores/';
-// import { VSlideYTransition } from 'vuetify/lib'
 
 export default {
-  // components: {
-  //   VSlideYTransition,
-  // },
   data() {
     return {
       newTask: '',
@@ -142,7 +140,7 @@ export default {
         store.commit("ADD_TASK", this.newTask);
         this.newTask = '';
         setTimeout(() => { // this will wait for the DOM to be updated and will get the actuall height
-          document.querySelector('.tasks-lists').scrollTop = document.querySelector('.tasks-lists').scrollHeight;
+          document.querySelector('.lists-scroll').scrollTop = document.querySelector('.lists-scroll').scrollHeight;
         }, 1);
       }
     },

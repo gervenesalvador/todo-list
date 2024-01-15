@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 
-var primaryID = 4;
+var nextTaskId = 4;
 
 export const store = new Vuex.Store({
   state: {
@@ -12,8 +12,8 @@ export const store = new Vuex.Store({
   },
   mutations: {
     ADD_TASK(state, task) {
-      state.tasks.push({ id: primaryID, text: task, status: {done: false} },);
-      primaryID++;
+      state.tasks.push({ id: nextTaskId, text: task, status: {done: false} });
+      nextTaskId++;
     },
     DELETE_TASK(state, taskId) {
         const taskIndex = state.tasks.findIndex(task => task.id === taskId)
@@ -24,7 +24,7 @@ export const store = new Vuex.Store({
     TOGGLE_TASK_STATUS(state, taskId) {
         const taskIndex = state.tasks.findIndex(task => task.id === taskId)
         if (taskIndex !== -1) {
-          state.tasks[taskIndex].status.done = !state.tasks[taskIndex].status.done
+            state.tasks[taskIndex].status.done = !state.tasks[taskIndex].status.done
         }
     },
     CLEAR_DONE_TASKS(state) {
@@ -32,7 +32,7 @@ export const store = new Vuex.Store({
     },
     DELETE_ALL_TASKS(state) {
         state.tasks = [];
-        primaryID = 1;
+        nextTaskId = 1;
     }
   },
 })
