@@ -13,15 +13,15 @@ This repository contains the source code for a simple and efficient todo list ap
 
 ### Installation
 1. Clone the repository:
-    - ```bash git clone https://github.com/gervenesalvador/todo-list.git```
+    - ``` git clone https://github.com/gervenesalvador/todo-list.git```
 2. Install dependencies:
-    - ```bash npm install```
+    - ``` npm install```
 3. Run development server:
-    - ```bash npm run dev```
+    - ``` npm run dev```
 4. Open [http://localhost:3000] (or the appropriate port) in your browser.
 
 ### Usage
-Use the interface to add tasks, edit existing ones, and mark them as completed. [Additional instructions specific to your app's features].
+Use the interface to add tasks, edit existing ones, and mark them as completed.
 
 ### Contributing
 We welcome contributions to the project! Feel free to fork the repository, create pull requests with your improvements, and report any issues you encounter. Please follow our Contribution Guidelines: link to contribution guidelines, if available.
