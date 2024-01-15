@@ -1,7 +1,5 @@
 ## Todo List App Readme
 
-Please note: This is a template README.md, feel free to adjust and personalize it according to your project's specific features and goals.
-
 ### Introduction
 
 This repository contains the source code for a simple and efficient todo list application built with [Technology Stack: Vue.js, Nuxt.js, Vuetify].
